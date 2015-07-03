@@ -17,6 +17,7 @@ var answers = {};
 describe("configInitializer", function() {
     beforeEach(function() {
         answers = {
+            recommended: true,
             indent: 2,
             quotes: "single",
             linebreak: "unix",
@@ -31,12 +32,18 @@ describe("configInitializer", function() {
 
     it("should create default config", function() {
         var config = init.processAnswers(answers);
+        assert.equal(config.rules.eqeqeq, 2);
         assert.deepEqual(config.rules.indent, [2, 2]);
         assert.deepEqual(config.rules.quotes, [2, "single"]);
         assert.deepEqual(config.rules["linebreak-style"], [2, "unix"]);
         assert.deepEqual(config.rules.semi, [2, "always"]);
         assert.equal(config.env.es6, true);
         assert.equal(config.env.browser, true);
+    });
+    it("should start with empty config", function() {
+        answers.recommended = false;
+        var config = init.processAnswers(answers);
+        assert.notProperty(config.rules, "eqeqeq");
     });
     it("should disable semi", function() {
         answers.semi = false;
